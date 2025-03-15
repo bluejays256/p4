@@ -343,3 +343,64 @@ def box_counting_dimension(img, max_box_size=100):
 dim = box_counting_dimension(julia)
 print(f"Estimated fractal dimension: {dim:.4f}")
 
+### PROBLEM 3 ###########
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.integrate
+import cv2
+
+# Lorenz system parameters
+sigma = 10
+rho = 48
+beta = 3
+
+def lorenz_system(state, t):
+    x, y, z = state
+    dxdt = sigma * (y - x)
+    dydt = x * (rho - z) - y
+    dzdt = x * y - beta * z
+    return [dxdt, dydt, dzdt]
+
+# Time array
+t = np.linspace(0, 12, 3000)
+
+# Initial condition
+initial_state = [1.0, 1.0, 1.0]
+
+# Solve the Lorenz system
+solution = scipy.integrate.odeint(lorenz_system, initial_state, t)
+x, y, z = solution.T
+
+# Create video
+video_name = "lorenz_attractor.mp4"
+fps = 30
+frame_size = (800, 600)
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+video = cv2.VideoWriter(video_name, fourcc, fps, frame_size)
+
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlim([-20, 20])
+ax.set_ylim([-30, 30])
+ax.set_zlim([0, 50])
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+
+for i in range(1, len(x)):
+    ax.plot(x[:i], y[:i], z[:i], color='b', alpha=0.6)
+    plt.savefig("frame.png", dpi=100)
+    frame = cv2.imread("frame.png")
+    frame = cv2.resize(frame, frame_size)
+    video.write(frame)
+    ax.cla()
+    ax.set_xlim([-20, 20])
+    ax.set_ylim([-30, 30])
+    ax.set_zlim([0, 50])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+cv2.destroyAllWindows()
+video.release()
+print("Video saved as", video_name)
