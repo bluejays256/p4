@@ -347,7 +347,7 @@ print(f"Estimated fractal dimension: {dim:.4f}")
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate
-import cv2
+#import cv2
 
 # Lorenz system parameters
 sigma = 10
@@ -375,8 +375,8 @@ x, y, z = solution.T
 video_name = "lorenz_attractor.mp4"
 fps = 30
 frame_size = (800, 600)
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter(video_name, fourcc, fps, frame_size)
+#fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+#video = cv2.VideoWriter(video_name, fourcc, fps, frame_size)
 
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection='3d')
@@ -390,9 +390,9 @@ ax.set_zlabel('Z')
 for i in range(1, len(x)):
     ax.plot(x[:i], y[:i], z[:i], color='b', alpha=0.6)
     plt.savefig("frame.png", dpi=100)
-    frame = cv2.imread("frame.png")
-    frame = cv2.resize(frame, frame_size)
-    video.write(frame)
+    #frame = cv2.imread("frame.png")
+    #frame = cv2.resize(frame, frame_size)
+    #video.write(frame)
     ax.cla()
     ax.set_xlim([-20, 20])
     ax.set_ylim([-30, 30])
@@ -401,6 +401,6 @@ for i in range(1, len(x)):
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
 
-cv2.destroyAllWindows()
-video.release()
+#cv2.destroyAllWindows()
+#video.release()
 print("Video saved as", video_name)
